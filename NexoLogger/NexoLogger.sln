@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerProducer", "LoggerProducer\LoggerProducer.csproj", "{A28AE72A-CD0A-4E5D-ADEA-20DC84D10FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexoLogger", "NexoLogger\NexoLogger.csproj", "{11F49AB7-4BC6-4291-83E4-832567938BE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85F79D28-EE21-408D-8C0C-6E876910B0E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A28AE72A-CD0A-4E5D-ADEA-20DC84D10FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28AE72A-CD0A-4E5D-ADEA-20DC84D10FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28AE72A-CD0A-4E5D-ADEA-20DC84D10FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28AE72A-CD0A-4E5D-ADEA-20DC84D10FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F49AB7-4BC6-4291-83E4-832567938BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F49AB7-4BC6-4291-83E4-832567938BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F49AB7-4BC6-4291-83E4-832567938BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F49AB7-4BC6-4291-83E4-832567938BE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13803F24-5A98-43BF-9E7A-9F3C8193D4BA}
+	EndGlobalSection
+EndGlobal
