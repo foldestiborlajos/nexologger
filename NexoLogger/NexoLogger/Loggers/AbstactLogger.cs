@@ -20,11 +20,13 @@ namespace NexoLogger.Loggers
 
         public virtual ILoggerConfiguration<T> GetConfig => _config;
 
-        public void SetConfig(ILoggerConfiguration<T> config) {
+        public void SetConfig(ILoggerConfiguration<T> config)
+        {
             _config = config;
         }
 
-        public AbstractLogger() {
+        public AbstractLogger()
+        {
             throw new ArgumentNullException();
         }
 
@@ -38,11 +40,13 @@ namespace NexoLogger.Loggers
 
         public IDisposable? BeginScope<TState>(TState state) where TState : notnull => default!;
 
-        public ILogEntry GetAsLogEntry<T>(LogLevels level, T state) {
-            return new DefaultLogEntry(level, state.ToString()); 
+        public ILogEntry GetAsLogEntry<T>(LogLevels level, T state)
+        {
+            return new DefaultLogEntry(level, state.ToString());
         }
 
-        public virtual bool IsEnabled(LogLevel logLevel) => (LogLevels)logLevel <= _config.MinLogLevel && _config.Filter(_config);
+        public virtual bool IsEnabled(LogLevel logLevel) => 
+            (LogLevels)logLevel >= _config.MinLogLevel && _config.Filter(_config);
 
         public abstract void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter);
 

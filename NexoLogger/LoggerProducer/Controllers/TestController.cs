@@ -43,7 +43,7 @@ namespace LoggerProducer.Controllers
                 streamResult = read.ReadToEnd();
             }
 
-            _logger.WriteLogDebugAsync<TestController>("helliu");
+            _logger.WriteLogDebugAsync<TestController>(message);
             
             return new JsonResult(message);
         }

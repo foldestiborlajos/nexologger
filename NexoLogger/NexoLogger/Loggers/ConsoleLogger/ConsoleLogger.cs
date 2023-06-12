@@ -39,21 +39,24 @@ namespace NexoLogger.Loggers.ConsoleLogger
             }
         }
 
-        private bool _valid(ILogEntry entry) {
+        private bool _valid(ILogEntry entry)
+        {
             return entry.Message.Length <= 1000;
         }
 
-        private void _log(ILogEntry e) {
+        private void _log(ILogEntry e)
+        {
             var originalColor = System.Console.ForegroundColor;
             System.Console.ForegroundColor = _getConsoleColor(e.Level);
             System.Console.WriteLine(e.Formatter(e, null));
             System.Console.ForegroundColor = originalColor;
         }
 
-        private async Task <bool> _logAsync(ILogEntry e) {
-            var originalColor = System.Console.ForegroundColor; 
+        private async Task<bool> _logAsync(ILogEntry e)
+        {
+            var originalColor = System.Console.ForegroundColor;
             System.Console.ForegroundColor = _getConsoleColor(e.Level);
-            await  System.Console.Out.WriteAsync(e.Formatter(e, null));
+            await System.Console.Out.WriteAsync(e.Formatter(e, null));
             System.Console.ForegroundColor = originalColor;
 
             return true;
@@ -62,34 +65,44 @@ namespace NexoLogger.Loggers.ConsoleLogger
 
         public override void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            if (state is ILogEntry e)
-            {
-                if (_valid(e))
-                {
-                    _log(e);
+            if (IsEnabled(logLevel)) {
 
-                }
-                else {
-                    throw new ArgumentException("A console message shouldn't be longer than 1000 characters");
-                }
-            }
-            else if (LoggerBuilder.GetConfig.ListenToHostEvents)
-            {
+                if (state is ILogEntry e)
+                {
+                    if (_valid(e))
+                    {
+                        _log(e);
 
-                try
-                {
-                    _log(GetAsLogEntry((LogLevels)logLevel, state));
+                    }
+                    else
+                    {
+                        throw new ArgumentException("A console message shouldn't be longer than 1000 characters");
+                    }
                 }
-                catch (IOException ex)
+                else if (LoggerBuilder.GetConfig.ListenToHostEvents)
                 {
-                    Debug.WriteLine(ex);
+
+                    try
+                    {
+                        _log(GetAsLogEntry((LogLevels)logLevel, state));
+                    }
+                    catch (IOException ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
                 }
             }
         }
 
         public async override Task<bool> WriteLogAsync(ILogEntry entry)
         {
-           return  await _logAsync(entry);
+            if (IsEnabled((LogLevel)entry.Level))
+            {
+                return await _logAsync(entry);
+            }
+            else {
+                return false;
+            }
         }
     }
 }

@@ -14,15 +14,13 @@ namespace NexoLogger.Loggers.StreamLogger
     {
         public StreamLogger() { }
 
-        public StreamLogger(string name, ILoggerConfiguration<StreamLogger> _conf) : base(name, _conf) { }   
+        public StreamLogger(string name, ILoggerConfiguration<StreamLogger> _conf) : base(name, _conf) { }
 
         public override StreamLoggerConfig GetConfig => (StreamLoggerConfig)base.GetConfig;
 
-        public override bool IsEnabled(LogLevel logLevel) {
-            return logLevel <= (LogLevel)GetConfig.MinLogLevel;
-        }
 
-        private void _log(ILogEntry entry) {
+        private void _log(ILogEntry entry)
+        {
             using (var writer = new StreamWriter(GetConfig.Target, GetConfig.Encoding, 1024, true))
             {
                 writer.WriteLine(entry);
@@ -31,7 +29,7 @@ namespace NexoLogger.Loggers.StreamLogger
 
         public override void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            if (state is ILogEntry entry && GetConfig.Target is not null && GetConfig.Target.CanWrite)
+            if (IsEnabled(logLevel) && state is ILogEntry entry && GetConfig.Target is not null && GetConfig.Target.CanWrite)
             {
 
                 try
@@ -46,7 +44,8 @@ namespace NexoLogger.Loggers.StreamLogger
 
                 }
             }
-            else if (LoggerBuilder.GetConfig.ListenToHostEvents) {
+            else if (LoggerBuilder.GetConfig.ListenToHostEvents)
+            {
 
                 try
                 {
@@ -60,25 +59,26 @@ namespace NexoLogger.Loggers.StreamLogger
             }
         }
 
-        public async override Task<bool> WriteLogAsync(ILogEntry entry) {
-            if (GetConfig.Target is not null && GetConfig.Target.CanWrite)
+        public async override Task<bool> WriteLogAsync(ILogEntry entry)
+        {
+            if (IsEnabled((LogLevel)entry.Level) && GetConfig.Target is not null && GetConfig.Target.CanWrite)
             {
-                    try
+                try
+                {
+                    using (var writer = new StreamWriter(GetConfig.Target, GetConfig.Encoding, 1024, true))
                     {
-                        using (var writer = new StreamWriter(GetConfig.Target, GetConfig.Encoding, 1024, true))
-                        {
-                            await writer.WriteAsync(entry.Formatter(entry, null));
-                            return true;
-                        }
-
+                        await writer.WriteAsync(entry.Formatter(entry, null));
+                        return true;
                     }
-                    catch (IOException ex)
-                    {
 
-                        throw ex;
+                }
+                catch (IOException ex)
+                {
 
-                    }
-                
+                    throw ex;
+
+                }
+
             }
             return false;
         }

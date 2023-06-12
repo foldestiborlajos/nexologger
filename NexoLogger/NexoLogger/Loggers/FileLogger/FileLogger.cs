@@ -83,34 +83,36 @@ namespace NexoLogger.Loggers.FileLogger
 
         public override void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
+            if (IsEnabled(logLevel)) {
+                if (state is ILogEntry ent)
+                {
+                    try
+                    {
+                        _log(_getCurrent(), ent);
+                    }
+                    catch (IOException ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
 
-            if (state is ILogEntry ent)
-            {
-                try
-                {
-                    _log(_getCurrent(), ent);
-                }
-                catch (IOException ex)
-                {
-                    Debug.WriteLine(ex);
-                }
+                } else if (LoggerBuilder.GetConfig.ListenToHostEvents) {
 
-            } else if (LoggerBuilder.GetConfig.ListenToHostEvents) {
-
-                try
-                {
-                    _log(_getCurrent(), GetAsLogEntry((LogLevels)logLevel, state));
-                }
-                catch (IOException ex)
-                {
-                    Debug.WriteLine(ex);
+                    try
+                    {
+                        _log(_getCurrent(), GetAsLogEntry((LogLevels)logLevel, state));
+                    }
+                    catch (IOException ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
                 }
             }
         }
 
         public async override Task<bool> WriteLogAsync(ILogEntry entry)
         {
-            
+            if (IsEnabled((LogLevel)entry.Level)) {
+
                 try
                 {
                     return await _logAsync(_getCurrent(), entry);
@@ -118,8 +120,13 @@ namespace NexoLogger.Loggers.FileLogger
                 catch (IOException ex)
                 {
                     Debug.WriteLine(ex);
-                throw ex;
+                    throw ex;
                 }
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

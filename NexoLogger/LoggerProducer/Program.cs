@@ -9,8 +9,8 @@ builder.Logging
     .ClearProviders()
     .UseNexoLogger((nexobuilder) => {
         nexobuilder
-    .Add(new ConsoleLoggerConfig(){MinLogLevel = NexoLogger.Models.LogLevels.None})
-    .Add(new FileLoggerConfig() { MinLogLevel = NexoLogger.Models.LogLevels.Debug})
+    .Add(new ConsoleLoggerConfig(){MinLogLevel = NexoLogger.Models.LogLevels.Info})
+    .Add(new FileLoggerConfig() { MinLogLevel = NexoLogger.Models.LogLevels.None})
     .Add(new StreamLoggerConfig() { MinLogLevel = NexoLogger.Models.LogLevels.None})
     ;
 });
